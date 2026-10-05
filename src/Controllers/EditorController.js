@@ -1,11 +1,11 @@
-const CanvasController = require("./CanvasController");
-const Modes = require("./ControlModes");
-const CellStates = require("../Organism/Cell/CellStates");
-const Directions = require("../Organism/Directions");
-const Hyperparams = require("../Hyperparameters");
-const Species = require("../Stats/Species");
-const LoadController = require("./LoadController");
-const FossilRecord = require("../Stats/FossilRecord");
+const CanvasController = require('./CanvasController');
+const Modes = require('./ControlModes');
+const CellStates = require('../Organism/Cell/CellStates');
+const Directions = require('../Organism/Directions');
+const Hyperparams = require('../Hyperparameters');
+const Species = require('../Stats/Species');
+const LoadController = require('./LoadController');
+const FossilRecord = require('../Stats/FossilRecord');
 
 class EditorController extends CanvasController{
     constructor(env, canvas) {
@@ -86,6 +86,9 @@ class EditorController extends CanvasController{
                 case "eye":
                     self.edit_cell_type = CellStates.eye;
                     break;
+                case "toxin":
+                    self.edit_cell_type = CellStates.toxin;
+                    break;
             }
             $(".cell-type" ).css( "border-color", "black" );
             var selected = '#'+this.id+'.cell-type';
@@ -109,7 +112,7 @@ class EditorController extends CanvasController{
         $('#move-range-edit').change ( function() {
             this.env.organism.move_range = parseInt($('#move-range-edit').val());
         }.bind(this));
-		
+
         $('#mutation-rate-edit').change ( function() {
             this.env.organism.mutability = parseInt($('#mutation-rate-edit').val());
         }.bind(this));
@@ -177,7 +180,7 @@ class EditorController extends CanvasController{
         $('#move-range').text("Move Range: "+org.move_range);
         $('#mutation-rate').text("Mutation Rate: "+org.mutability);
        
-		if (Hyperparams.useGlobalMutability) {
+        if (Hyperparams.useGlobalMutability) {
             $('#mutation-rate').css('display', 'none');
         }
         else {
@@ -203,9 +206,9 @@ class EditorController extends CanvasController{
             $('#move-range-edit').val(org.move_range);
         }
 
-		$('#mutation-rate-edit').val(org.mutability);
+        $('#mutation-rate-edit').val(org.mutability);
         if (Hyperparams.useGlobalMutability) {
-			$('#mutation-rate-cont').css('display', 'none');
+            $('#mutation-rate-cont').css('display', 'none');
         }
         else {
             $('#mutation-rate-cont').css('display', 'block');
