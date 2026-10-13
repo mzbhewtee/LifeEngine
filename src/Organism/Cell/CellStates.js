@@ -1,3 +1,11 @@
+// Draws a dark overlay on a cell whose function a toxin has impaired.
+function drawImpairedOverlay(ctx, cell, size) {
+    if (size > 1 && cell.cell_owner && cell.cell_owner.impaired) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+        ctx.fillRect(cell.x, cell.y, size, size);
+    }
+}
+
 // A cell state is used to differentiate type and render the cell
 class CellState{
     constructor(name) {
@@ -8,6 +16,7 @@ class CellState{
     render(ctx, cell, size) {
         ctx.fillStyle = this.color;
         ctx.fillRect(cell.x, cell.y, size, size);
+        drawImpairedOverlay(ctx, cell, size);
     }
 }
 
@@ -76,6 +85,7 @@ class Eye extends CellState {
         ctx.fillStyle = this.slit_color;
         ctx.fillRect(x, y, w, h);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
+        drawImpairedOverlay(ctx, cell, size);
     }
 }
 
@@ -92,13 +102,18 @@ const CellStates = {
     toxin: new Toxin(),
     defineLists() {
         this.all = [this.empty, this.food, this.wall, this.mouth, this.producer, this.mover, this.killer, this.armor, this.eye, this.toxin]
+        // every cell type an organism can have (used by the statistics charts)
         this.living = [this.mouth, this.producer, this.mover, this.killer, this.armor, this.eye, this.toxin];
+        // cell types mutation may create. Toxin is left out so it only exists where
+        // it is deliberately seeded and the control chamber stays toxin-free.
+        // Offspring still inherit toxin cells, and a mutation can still remove one.
+        this.mutable = [this.mouth, this.producer, this.mover, this.killer, this.armor, this.eye];
     },
     getRandomName: function() {
         return this.all[Math.floor(Math.random() * this.all.length)].name;
     },
     getRandomLivingType: function() {
-        return this.living[Math.floor(Math.random() * this.living.length)];
+        return this.mutable[Math.floor(Math.random() * this.mutable.length)];
     }
 }
 

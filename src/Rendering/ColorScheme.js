@@ -10,7 +10,7 @@ var color_scheme = {
     "killer":"#F82380",
     "armor":"#7230DB",
     "eye":"#B6C1EA",
-    "toxin":"#FF7A00",
+    "toxin":"#5d3405",
     "eye-slit": "#0E1318"
 }
 

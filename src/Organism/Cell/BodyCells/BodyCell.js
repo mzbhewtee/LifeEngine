@@ -1,5 +1,5 @@
-const CellStates = require("../CellStates");
-const Directions = require("../../Directions");
+const CellStates = require('../CellStates');
+const Directions = require('../../Directions');
 
 // A body cell defines the relative location of the cell in it's parent organism. It also defines their functional behavior.
 class BodyCell{
@@ -8,6 +8,7 @@ class BodyCell{
         this.org = org;
         this.loc_col = loc_col;
         this.loc_row = loc_row;
+        this.impaired = false; // set by toxin cells; not copied to offspring
 
         var distance = Math.max(Math.abs(loc_row)*2 + 2, Math.abs(loc_col)*2 + 2);
         if (this.org.anatomy.birth_distance < distance) {

@@ -9,6 +9,8 @@ class ProducerCell extends BodyCell{
     }
 
     performFunction() {
+        if (this.impaired)
+            return; // a toxin has stopped this producer making food
         if (this.org.anatomy.is_mover && !Hyperparams.moversCanProduce)
             return;
         var env = this.org.env;

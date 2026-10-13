@@ -120,6 +120,19 @@ class Organism {
         Math.max(this.food_collected -= this.foodNeeded(), 0);
     }
 
+    // Picks a random cell that mutation may change or remove. Toxin cells are the
+    // experimental treatment, so mutation never deletes or replaces them.
+    getMutableCell() {
+        var candidates = [];
+        for (var cell of this.anatomy.cells) {
+            if (cell.state != CellStates.toxin)
+                candidates.push(cell);
+        }
+        if (candidates.length == 0)
+            return null;
+        return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
     mutate() {
         let added = false;
         let changed = false;
@@ -136,15 +149,18 @@ class Organism {
             }
         }
         if (this.calcRandomChance(Hyperparams.changeProb)){
-            let cell = this.anatomy.getRandomCell();
-            let state = CellStates.getRandomLivingType();
-            this.anatomy.replaceCell(state, cell.loc_col, cell.loc_row);
-            changed = true;
+            let cell = this.getMutableCell();
+            if (cell != null) {
+                let state = CellStates.getRandomLivingType();
+                this.anatomy.replaceCell(state, cell.loc_col, cell.loc_row);
+                changed = true;
+            }
         }
         if (this.calcRandomChance(Hyperparams.removeProb)){
             if(this.anatomy.cells.length > 1) {
-                let cell = this.anatomy.getRandomCell();
-                removed = this.anatomy.removeCell(cell.loc_col, cell.loc_row);
+                let cell = this.getMutableCell();
+                if (cell != null)
+                    removed = this.anatomy.removeCell(cell.loc_col, cell.loc_row);
             }
         }
         return added || changed || removed;
